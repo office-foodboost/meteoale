@@ -1,0 +1,158 @@
+/* Mappa meteo animata - stile Beppiani Home.
+   Tutte le classi hanno il prefisso "mm-" per poter inserire la mappa nell'app principale. */
+
+.mm-root {
+  /* colori dal tema dell'app (temi.css, html[data-stile]); senza temi.css restano quelli del Classico */
+  --mm-nero: var(--t-mappa-fondo, #000); --mm-oro: var(--t-pannello-accento, #C9B27C); --mm-crema: var(--t-pannello-testo, #F2EAD8);
+  --mm-bronzo: var(--t-pannello-testo-2, #8A7C66);
+  --mm-card: var(--t-pannello, rgba(16, 14, 10, .88)); --mm-bordo: var(--t-pannello-bordo, #241F16);
+  --mm-ombra: var(--t-pannello-ombra, none); --mm-attivo-bordo: var(--t-pannello-attivo-bordo, rgba(201, 178, 124, .55));
+  --mm-traccia: var(--t-pannello-traccia, #2a251b); --mm-traccia-2: var(--t-pannello-traccia-2, #4a4233);
+  --mm-pomello: var(--t-pannello-pomello, #F2EAD8); --mm-pin: var(--t-pin, #C9B27C); --mm-pin-bordo: var(--t-pin-bordo, #000);
+  --mm-fondo: var(--t-mappa-fondo, #0b0a08);
+  --mm-font: var(--t-font, -apple-system, "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif);
+  position: relative; width: 100%; height: 100%; overflow: hidden;
+  background: var(--mm-nero); color: var(--mm-crema); font-family: var(--mm-font);
+  -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none; user-select: none;
+}
+.mm-root * { box-sizing: border-box; }
+.mm-mappa { position: absolute; top: 0; right: 0; bottom: 0; left: 0; background: var(--mm-fondo); }
+.mm-root .leaflet-container { background: var(--mm-fondo); font-family: var(--mm-font); }
+
+/* Mappa di base satellitare (EOxCloudless) un po' scurita, così nuvole e pioggia risaltano. */
+.mm-root .mm-f-satellite { filter: brightness(.72) saturate(.85); }
+.mm-root .mm-f-scura { filter: brightness(.8); }
+
+/* Il radar arriva a 256 px e viene allargato: niente bordi tra i riquadri. */
+.mm-root .mm-pane-radar img.leaflet-tile { image-rendering: auto; }
+.mm-root .mm-pane-radar { filter: url(#mm-filtro-radar); }
+
+/* Segnaposto del luogo */
+.mm-pin { width: 18px; height: 18px; border-radius: 50%; background: var(--mm-pin); border: 3px solid var(--mm-pin-bordo);
+  box-shadow: 0 0 0 2px var(--mm-attivo-bordo), 0 2px 8px rgba(0, 0, 0, .6); }
+
+/* Intestazione in alto */
+.mm-testa {
+  position: absolute; z-index: 1000; left: 12px; right: 76px;
+  top: calc(env(safe-area-inset-top, 0px) + 12px);
+  display: inline-flex; flex-direction: column; gap: 2px; pointer-events: none;
+}
+.mm-testa-box { align-self: flex-start; background: var(--mm-card); border: 1px solid var(--mm-bordo);
+  border-radius: 14px; padding: 10px 14px; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); max-width: 100%; box-shadow: var(--mm-ombra); }
+.mm-etichetta { font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: var(--mm-bronzo); }
+.mm-luogo { font-size: 13px; letter-spacing: .22em; text-transform: uppercase; color: var(--mm-oro);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
+
+/* Pulsanti degli strati, colonna a destra */
+.mm-strati {
+  position: absolute; z-index: 1000; right: 12px;
+  top: calc(env(safe-area-inset-top, 0px) + 12px);
+  display: flex; flex-direction: column; gap: 8px;
+}
+.mm-btn {
+  width: 56px; min-height: 56px; padding: 7px 0 6px; border-radius: 14px;
+  background: var(--mm-card); border: 1px solid var(--mm-bordo); color: var(--mm-bronzo);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+  font: inherit; cursor: pointer; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  transition: color .15s, border-color .15s; box-shadow: var(--mm-ombra);
+}
+.mm-btn svg { width: 24px; height: 24px; display: block; }
+.mm-btn span { font-size: 8.5px; letter-spacing: .14em; text-transform: uppercase; }
+.mm-btn.mm-attivo { color: var(--mm-crema); border-color: var(--mm-attivo-bordo); }
+.mm-btn.mm-attivo svg { color: var(--mm-oro); }
+.mm-btn:active { transform: scale(.96); }
+.mm-btn-centra { margin-top: 6px; }
+
+/* Barra del tempo in basso */
+.mm-barra {
+  position: absolute; z-index: 1000; left: 10px; right: 10px;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 10px);
+  background: var(--mm-card); border: 1px solid var(--mm-bordo); border-radius: 18px;
+  padding: 12px 14px 10px; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); box-shadow: var(--mm-ombra);
+}
+.mm-riga { display: flex; align-items: center; gap: 12px; }
+.mm-play {
+  flex: 0 0 48px; width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--mm-oro);
+  background: transparent; color: var(--mm-oro); display: flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.mm-play svg { width: 20px; height: 20px; }
+.mm-play:disabled { opacity: .4; }
+.mm-orario { flex: 1; min-width: 0; }
+.mm-ora { font-size: 34px; font-weight: var(--t-peso-grande, 200); color: var(--mm-crema); line-height: 1; letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
+.mm-giorno { font-size: 10px; letter-spacing: .16em; line-height: 1.45; text-transform: uppercase; color: var(--mm-bronzo); margin-top: 5px; }
+.mm-stato { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--mm-bronzo); text-align: right; max-width: 42%; }
+.mm-stato b { color: var(--mm-oro); font-weight: 500; }
+
+/* Cursore */
+.mm-cursore-box { position: relative; margin: 12px 2px 0; height: 44px; display: flex; align-items: center; }
+.mm-tacche { position: absolute; left: 11px; right: 11px; top: 50%; height: 3px; margin-top: -1.5px; display: flex; gap: 2px; pointer-events: none; }
+.mm-tacca { flex: 1; background: var(--mm-traccia); border-radius: 2px; transition: background .2s; }
+.mm-tacca.mm-pronta { background: var(--mm-traccia-2); }
+.mm-tacca.mm-passata { background: var(--mm-oro); }
+.mm-cursore { -webkit-appearance: none; appearance: none; width: 100%; height: 44px; background: transparent; margin: 0; position: relative; z-index: 1; }
+.mm-cursore:focus { outline: none; }
+.mm-cursore::-webkit-slider-runnable-track { height: 44px; background: transparent; }
+.mm-cursore::-moz-range-track { height: 44px; background: transparent; }
+.mm-cursore::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; margin-top: 11px; border-radius: 50%;
+  background: var(--mm-pomello); border: 4px solid var(--mm-oro); box-shadow: 0 1px 6px rgba(0,0,0,.45); }
+.mm-cursore::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: var(--mm-pomello); border: 4px solid var(--mm-oro); }
+.mm-scala { position: relative; height: 1.4em; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--mm-bronzo); margin: -4px 2px 0; }
+.mm-scala span { position: absolute; top: 0; white-space: nowrap; }
+.mm-s-inizio { left: 0; }
+.mm-s-fine { right: 0; }
+.mm-s-adesso { transform: translateX(-50%); color: var(--mm-crema); }
+.mm-s-prev { transform: translateX(-50%); color: var(--mm-oro); }
+
+/* Previsione: dopo "Adesso" la barra è più sottile e i tratti già visti più tenui */
+.mm-tacca.mm-futuro { height: 2px; align-self: center; }
+.mm-tacca.mm-futuro.mm-passata { background: var(--mm-oro); opacity: .6; }
+.mm-tacca.mm-carica { background: var(--mm-traccia-2); animation: mm-pulsa .8s ease-in-out infinite alternate; }
+@keyframes mm-pulsa { from { opacity: .25; } to { opacity: 1; } }
+.mm-adesso { position: absolute; top: 50%; width: 2px; height: 16px; margin: -8px 0 0 -1px; border-radius: 1px;
+  background: var(--mm-crema); opacity: .85; pointer-events: none; }
+.mm-previsto { font-size: 12px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--mm-oro); vertical-align: middle; }
+
+/* Scorciatoie sopra il cursore */
+.mm-salti { display: flex; gap: 6px; margin-top: 10px; }
+.mm-salto { flex: 1 1 0; min-width: 0; height: 30px; padding: 0 4px; border-radius: 15px; border: 1px solid var(--mm-bordo);
+  background: transparent; color: var(--mm-bronzo); font: inherit; font-size: 10px; letter-spacing: .12em; text-transform: uppercase;
+  white-space: nowrap; cursor: pointer; display: flex; align-items: center; justify-content: center; text-align: center; }
+.mm-salto[hidden] { display: none; }
+.mm-salto.mm-attivo { color: var(--mm-crema); border-color: var(--mm-attivo-bordo); }
+.mm-salto:active { transform: scale(.96); }
+.mm-salti + .mm-cursore-box { margin-top: 4px; }
+
+/* Rotellina di caricamento accanto a "Carico previsione" */
+.mm-rotella { display: inline-block; width: 10px; height: 10px; margin: 0 6px -1px 0; border-radius: 50%;
+  border: 1.5px solid var(--mm-traccia-2); border-top-color: var(--mm-oro); animation: mm-gira .8s linear infinite; }
+@keyframes mm-gira { to { transform: rotate(360deg); } }
+
+/* Legenda pioggia e crediti */
+.mm-piede { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 9px; padding-top: 8px; border-top: 1px solid var(--mm-bordo); }
+.mm-legenda { display: flex; align-items: center; gap: 6px; font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: var(--mm-bronzo); flex: 0 0 auto; }
+.mm-legenda i { display: block; width: 46px; height: 5px; border-radius: 3px;
+  /* scala SRI della Protezione Civile: trasparente, Debole, Moderato, (giallo), Intenso, Forte, Molto forte */
+  background: linear-gradient(90deg, rgba(102,252,252,0), #66FCFC 16%, #4CFB4C 33%, #FBFB4C 50%, #FB8333 67%, #FB4C4C 84%, #D54CFF); }
+.mm-piede-sx { display: flex; flex-direction: column; gap: 6px; flex: 0 0 auto; }
+/* la nota va a capo alla larghezza della legenda, così i crediti non si stringono */
+.mm-nota-fulmini { display: none; width: 0; min-width: 100%; line-height: 1.35; font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: var(--mm-bronzo); }
+.mm-fulmini-futuro .mm-nota-fulmini { display: block; }
+.mm-fulmini-futuro .mm-btn[aria-label="Fulmini"] { opacity: .5; }
+.mm-crediti { font-size: 9px; line-height: 1.35; color: var(--mm-bronzo); text-align: right; }
+.mm-crediti a { color: var(--mm-bronzo); text-decoration: none; }
+
+.mm-avviso { position: absolute; z-index: 1001; left: 50%; transform: translateX(-50%);
+  top: calc(env(safe-area-inset-top, 0px) + 84px); background: var(--mm-card); border: 1px solid var(--mm-bordo);
+  border-radius: 12px; padding: 8px 12px; font-size: 12px; color: var(--mm-crema); display: none; max-width: 80%; text-align: center; }
+.mm-avviso.mm-vis { display: block; }
+
+/* Stile Semplice: scritte del pannello più grandi */
+html[data-stile="semplice"] .mm-btn { width: 64px; min-height: 62px; }
+html[data-stile="semplice"] .mm-btn span { font-size: 11px; letter-spacing: .04em; font-weight: 700; }
+html[data-stile="semplice"] .mm-giorno, html[data-stile="semplice"] .mm-stato,
+html[data-stile="semplice"] .mm-scala { font-size: 13px; letter-spacing: .04em; font-weight: 600; }
+html[data-stile="semplice"] .mm-legenda, html[data-stile="semplice"] .mm-nota-fulmini { font-size: 12px; letter-spacing: .04em; font-weight: 600; }
+html[data-stile="semplice"] .mm-ora { font-size: 38px; }
+html[data-stile="semplice"] .mm-salto { height: 36px; font-size: 13px; letter-spacing: .02em; font-weight: 700; }
+html[data-stile="semplice"] .mm-previsto { font-size: 14px; letter-spacing: .04em; font-weight: 700; }

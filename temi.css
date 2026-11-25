@@ -1,0 +1,196 @@
+/* MeteoAle · Temi condivisi (gettoni di colore e barra delle schede)
+   Uso:  <html data-stile="classico|cielo|chiaro|semplice|scena">  +  <link rel="stylesheet" href="temi.css">
+   - Solo variabili con prefisso --t- e classi con prefisso mt-: non tocca gli stili propri delle pagine.
+   - Notte: html[data-notte] (index.html, cielo e scena) oppure body.scuro (pagina Scena).
+   - I colori dei DATI (scala temperature, pioggia, UV OMS, aria EEA) restano gli stessi in ogni tema:
+     sui fondi chiari cambia solo la luminosità (blu pioggia più scuro, giallo fulmine più scuro…). */
+
+/* ---------- Classico: nero e oro (anche il valore predefinito) ---------- */
+:root, html[data-stile="classico"] {
+  --t-font: -apple-system, "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --t-bg: #000; --t-foglio: #000;
+  --t-testo: #F2EAD8; --t-testo-2: #8A7C66; --t-testo-3: #5A4F3E; --t-accento: #C9B27C;
+  --t-card: #100E0A; --t-card-solido: #100E0A; --t-card-bordo: #241F16; --t-linea: #241F16; --t-incavo: #000;
+  --t-ombra: none; --t-blur: none; --t-raggio: 16px;
+  /* titoli dei riquadri (h2) ed etichette piccole */
+  --t-h2-size: 11px; --t-h2-peso: 500; --t-h2-spazio: .18em; --t-h2-case: uppercase; --t-h2-colore: var(--t-testo-2);
+  --t-et-size: 11px; --t-et-peso: 400; --t-et-spazio: .18em; --t-et-case: uppercase; --t-et-colore: var(--t-testo-2);
+  --t-peso-grande: 100; --t-peso-valori: 300;
+  /* intestazione */
+  --t-testa-bg: #000; --t-testa-bordo: transparent; --t-testa-blur: none;
+  --t-testa-testo: var(--t-testo); --t-testa-testo-2: var(--t-testo-2); --t-testa-accento: var(--t-accento);
+  --t-luogo-size: 13px; --t-luogo-peso: 400; --t-luogo-spazio: .22em; --t-luogo-case: uppercase;
+  /* barra delle schede */
+  --t-alto-barra: 62px; --t-barra-bg: rgba(0,0,0,.94); --t-barra-bordo: 1px solid #241F16; --t-barra-blur: blur(12px);
+  --t-barra-ombra: none; --t-barra-testo: #8A7C66; --t-barra-attivo: #C9B27C; --t-barra-attivo-bg: transparent;
+  --t-barra-font: 11px; --t-barra-peso: 400; --t-barra-spazio: .06em; --t-barra-ic: 24px;
+  /* dati */
+  --t-pioggia: #4FA3FF; --t-neve: #DDEBFF; --t-fulmine: #FFF200; --t-anello: rgba(242,234,216,.45);
+  --t-graf-notte: #060504; --t-graf-bordo: transparent;
+  /* icone meteo (tratto) */
+  --t-ic-sole: #C9B27C; --t-ic-nube: #F2EAD8; --t-ic-nube-fondo: #000; --t-ic-goccia: #4FA3FF;
+  --t-luna-buio: #241F16; --t-luna-luce: #F2EAD8;
+  /* mappa */
+  --t-mappa-fondo: #0b0a08; --t-mini-fondo: #0a0907;
+  --t-pannello: rgba(16,14,10,.88); --t-pannello-bordo: #241F16; --t-pannello-ombra: none;
+  --t-pannello-testo: #F2EAD8; --t-pannello-testo-2: #8A7C66; --t-pannello-accento: #C9B27C;
+  --t-pannello-attivo-bordo: rgba(201,178,124,.55); --t-pannello-traccia: #2a251b; --t-pannello-traccia-2: #4a4233;
+  --t-pannello-pomello: #F2EAD8; --t-pin: #C9B27C; --t-pin-bordo: #000;
+}
+
+/* ---------- Cielo: cielo vero di sfondo, testo bianco, riquadri smerigliati ---------- */
+html[data-stile="cielo"] {
+  --cielo-a: #1A62C4; --cielo-b: #3B8EE0; --cielo-c: #74B5EC;
+  --t-font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", system-ui, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  --t-bg: var(--cielo-a); --t-foglio: linear-gradient(180deg, var(--cielo-a), var(--cielo-b));
+  --t-testo: #fff; --t-testo-2: rgba(255,255,255,.80); --t-testo-3: rgba(255,255,255,.64); --t-accento: #fff;
+  --t-card: rgba(6,28,64,.16); --t-card-solido: var(--cielo-b); --t-card-bordo: rgba(255,255,255,.16); --t-linea: rgba(255,255,255,.20);
+  --t-incavo: rgba(6,28,64,.16);
+  --t-ombra: none; --t-blur: blur(24px) saturate(150%); --t-raggio: 18px;
+  --t-h2-size: 12px; --t-h2-peso: 600; --t-h2-spazio: .06em; --t-h2-case: uppercase; --t-h2-colore: rgba(255,255,255,.72);
+  --t-et-size: 12px; --t-et-peso: 600; --t-et-spazio: .06em; --t-et-case: uppercase; --t-et-colore: rgba(255,255,255,.72);
+  --t-peso-grande: 200; --t-peso-valori: 400;
+  --t-testa-bg: rgba(0,20,50,.10); --t-testa-bordo: transparent; --t-testa-blur: blur(20px) saturate(150%);
+  --t-luogo-size: 20px; --t-luogo-peso: 500; --t-luogo-spazio: .005em; --t-luogo-case: none;
+  --t-barra-bg: rgba(6,24,56,.30); --t-barra-bordo: 1px solid rgba(255,255,255,.16); --t-barra-blur: blur(24px) saturate(160%);
+  --t-barra-testo: rgba(255,255,255,.70); --t-barra-attivo: #fff; --t-barra-font: 11px; --t-barra-peso: 500; --t-barra-spazio: .02em;
+  --t-pioggia: #B3DEFF; --t-neve: #EAF4FF; --t-fulmine: #FFF200; --t-anello: rgba(255,255,255,.55);
+  --t-graf-notte: rgba(0,10,40,.16); --t-graf-bordo: rgba(0,25,70,.22);
+  --t-ic-sole: #FFD54A; --t-ic-nube: #fff; --t-ic-nube-fondo: #fff; --t-ic-goccia: #9AD2FF;
+  --t-luna-buio: rgba(255,255,255,.22); --t-luna-luce: #fff;
+  --t-mappa-fondo: #1A4F96; --t-mini-fondo: rgba(10,30,60,.25);
+  --t-pannello: rgba(255,255,255,.80); --t-pannello-bordo: rgba(255,255,255,.6); --t-pannello-ombra: 0 4px 18px rgba(0,30,80,.22);
+  --t-pannello-testo: #10243F; --t-pannello-testo-2: #4A5D75; --t-pannello-accento: #1A62C4;
+  --t-pannello-attivo-bordo: rgba(26,98,196,.55); --t-pannello-traccia: rgba(16,36,63,.14); --t-pannello-traccia-2: rgba(16,36,63,.32);
+  --t-pannello-pomello: #fff; --t-pin: #fff; --t-pin-bordo: #1A62C4;
+}
+html[data-stile="cielo"][data-notte] {
+  --t-card: rgba(255,255,255,.08); --t-incavo: rgba(255,255,255,.06);
+  --t-graf-notte: rgba(0,0,0,.18);
+  --t-pannello: rgba(14,22,46,.80); --t-pannello-bordo: rgba(255,255,255,.14); --t-pannello-ombra: 0 4px 18px rgba(0,0,0,.35);
+  --t-pannello-testo: #fff; --t-pannello-testo-2: rgba(255,255,255,.66); --t-pannello-accento: #9CC8FF;
+  --t-pannello-attivo-bordo: rgba(156,200,255,.55); --t-pannello-traccia: rgba(255,255,255,.14); --t-pannello-traccia-2: rgba(255,255,255,.3);
+  --t-pin-bordo: #13224A;
+}
+
+/* ---------- Chiaro: bianco, bordi sottili, un solo colore per le azioni ---------- */
+html[data-stile="chiaro"] {
+  --t-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --t-bg: #F1F3F5; --t-foglio: #F1F3F5;
+  --t-testo: #0F1720; --t-testo-2: #5A6570; --t-testo-3: #6B7580; --t-accento: #0A6B73;
+  --t-card: #fff; --t-card-solido: #fff; --t-card-bordo: #D8DDE2; --t-linea: #E8ECEF; --t-incavo: #F1F3F5;
+  --t-ombra: none; --t-blur: none; --t-raggio: 12px;
+  --t-h2-size: 18px; --t-h2-peso: 800; --t-h2-spazio: -.01em; --t-h2-case: none; --t-h2-colore: var(--t-testo);
+  --t-et-size: 12px; --t-et-peso: 700; --t-et-spazio: .04em; --t-et-case: uppercase; --t-et-colore: var(--t-testo-2);
+  --t-peso-grande: 800; --t-peso-valori: 700;
+  --t-testa-bg: #fff; --t-testa-bordo: #D8DDE2; --t-testa-blur: none; --t-testa-accento: #0F1720;
+  --t-luogo-size: 17px; --t-luogo-peso: 800; --t-luogo-spazio: -.01em; --t-luogo-case: none;
+  --t-barra-bg: #fff; --t-barra-bordo: 1px solid #D8DDE2; --t-barra-blur: none;
+  --t-barra-testo: #5A6570; --t-barra-attivo: #0A6B73; --t-barra-font: 12px; --t-barra-peso: 600; --t-barra-spazio: 0;
+  --t-pioggia: #1E6FD0; --t-neve: #2E78B5; --t-fulmine: #A68600; --t-anello: rgba(15,23,32,.22);
+  --t-graf-notte: rgba(15,23,32,.045); --t-graf-bordo: rgba(15,23,32,.30);
+  --t-ic-sole: #F0A400; --t-ic-nube: #6B7785; --t-ic-nube-fondo: #fff; --t-ic-goccia: #1E6FD0;
+  --t-luna-buio: #DCE1E6; --t-luna-luce: #F3C64A;
+  --t-mappa-fondo: #E8ECEF; --t-mini-fondo: #E6EEF2;
+  --t-pannello: rgba(255,255,255,.94); --t-pannello-bordo: #D8DDE2; --t-pannello-ombra: 0 2px 10px rgba(15,23,32,.14);
+  --t-pannello-testo: #0F1720; --t-pannello-testo-2: #5A6570; --t-pannello-accento: #0A6B73;
+  --t-pannello-attivo-bordo: #0A6B73; --t-pannello-traccia: #E1E5E9; --t-pannello-traccia-2: #B9C2CA;
+  --t-pannello-pomello: #fff; --t-pin: #0A6B73; --t-pin-bordo: #fff;
+}
+
+/* ---------- Semplice: fondo caldo, testi grandi, contrasto alto ---------- */
+html[data-stile="semplice"] {
+  --t-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --t-bg: #F4F1EA; --t-foglio: #F4F1EA;
+  --t-testo: #15191F; --t-testo-2: #47505C; --t-testo-3: #47505C; --t-accento: #1556B0;
+  --t-card: #fff; --t-card-solido: #fff; --t-card-bordo: transparent; --t-linea: #ECE7DD; --t-incavo: #F4F1EA;
+  --t-ombra: 0 2px 8px rgba(30,30,20,.08); --t-blur: none; --t-raggio: 22px;
+  --t-h2-size: 23px; --t-h2-peso: 800; --t-h2-spazio: -.01em; --t-h2-case: none; --t-h2-colore: var(--t-testo);
+  --t-et-size: 16px; --t-et-peso: 700; --t-et-spazio: 0; --t-et-case: none; --t-et-colore: var(--t-testo-2);
+  --t-peso-grande: 800; --t-peso-valori: 700;
+  --t-testa-bg: #F4F1EA; --t-testa-bordo: #E2DDD2; --t-testa-blur: none; --t-testa-accento: #15191F;
+  --t-luogo-size: 24px; --t-luogo-peso: 800; --t-luogo-spazio: -.01em; --t-luogo-case: none;
+  --t-alto-barra: 72px; --t-barra-bg: #fff; --t-barra-bordo: 2px solid #E2DDD2; --t-barra-blur: none;
+  --t-barra-ombra: 0 -2px 10px rgba(30,30,20,.06);
+  --t-barra-testo: #47505C; --t-barra-attivo: #1556B0; --t-barra-attivo-bg: #E2EDFF;
+  --t-barra-font: 15px; --t-barra-peso: 700; --t-barra-spazio: 0; --t-barra-ic: 28px;
+  --t-pioggia: #1D5FBF; --t-neve: #0E5E86; --t-fulmine: #8F7000; --t-anello: rgba(21,25,31,.28);
+  --t-graf-notte: rgba(21,25,31,.05); --t-graf-bordo: rgba(21,25,31,.38);
+  --t-ic-sole: #E89B00; --t-ic-nube: #47505C; --t-ic-nube-fondo: #fff; --t-ic-goccia: #1D5FBF;
+  --t-luna-buio: #E2DDD2; --t-luna-luce: #F2BE2C;
+  --t-mappa-fondo: #E9E4D9; --t-mini-fondo: #E6EEF8;
+  --t-pannello: rgba(255,255,255,.96); --t-pannello-bordo: #E2DDD2; --t-pannello-ombra: 0 4px 16px rgba(30,30,20,.16);
+  --t-pannello-testo: #15191F; --t-pannello-testo-2: #47505C; --t-pannello-accento: #1556B0;
+  --t-pannello-attivo-bordo: #1556B0; --t-pannello-traccia: #E2DDD2; --t-pannello-traccia-2: #BDB6A8;
+  --t-pannello-pomello: #fff; --t-pin: #1556B0; --t-pin-bordo: #fff;
+}
+
+/* ---------- Scena: valle illustrata in alto, riquadri tondi su fondo tinto dalla scena ---------- */
+html[data-stile="scena"] {
+  --t-s1: #2F8FE8; --t-s2: #6DB8F5;
+  --t-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --t-bg: #EAF4FD; --t-foglio: var(--t-bg);
+  --t-testo: #15263A; --t-testo-2: #5F7085; --t-testo-3: #6A7A8E; --t-accento: #2F7FE0;
+  --t-card: #fff; --t-card-solido: #fff; --t-card-bordo: transparent; --t-linea: #E3EAF2; --t-incavo: #EEF3F8;
+  --t-ombra: 0 1px 2px rgba(20,40,70,.06), 0 6px 20px rgba(20,40,70,.07); --t-blur: none; --t-raggio: 22px;
+  --t-h2-size: 12.5px; --t-h2-peso: 700; --t-h2-spazio: .06em; --t-h2-case: uppercase; --t-h2-colore: var(--t-testo-2);
+  --t-et-size: 12px; --t-et-peso: 700; --t-et-spazio: .05em; --t-et-case: uppercase; --t-et-colore: var(--t-testo-2);
+  --t-peso-grande: 250; --t-peso-valori: 600;
+  --t-testa-bg: linear-gradient(180deg, var(--t-s1), var(--t-s2)); --t-testa-bordo: transparent; --t-testa-blur: none;
+  --t-testa-testo: #fff; --t-testa-testo-2: rgba(255,255,255,.88); --t-testa-accento: #fff;
+  --t-luogo-size: 19px; --t-luogo-peso: 700; --t-luogo-spazio: -.01em; --t-luogo-case: none;
+  --t-barra-bg: #fff; --t-barra-bordo: 1px solid #E3EAF2; --t-barra-blur: none; --t-barra-ombra: 0 -4px 18px rgba(20,40,70,.06);
+  --t-barra-testo: #5F7085; --t-barra-attivo: #2F7FE0; --t-barra-font: 11.5px; --t-barra-peso: 650; --t-barra-spazio: 0;
+  --t-pioggia: #2F7FE0; --t-neve: #3D86C6; --t-fulmine: #A88400; --t-anello: rgba(21,38,58,.22);
+  --t-graf-notte: rgba(21,38,58,.045); --t-graf-bordo: rgba(21,38,58,.30);
+  --t-ic-sole: #F2AE00; --t-ic-nube: #7D8EA3; --t-ic-nube-fondo: #fff; --t-ic-goccia: #2F7FE0;
+  --t-luna-buio: #DDE5EE; --t-luna-luce: #F3C64A;
+  --t-mappa-fondo: #CFE3D2; --t-mini-fondo: #CFE3D2;
+  --t-pannello: rgba(255,255,255,.92); --t-pannello-bordo: rgba(255,255,255,.7); --t-pannello-ombra: 0 4px 18px rgba(20,40,70,.18);
+  --t-pannello-testo: #15263A; --t-pannello-testo-2: #5F7085; --t-pannello-accento: #2F7FE0;
+  --t-pannello-attivo-bordo: #2F7FE0; --t-pannello-traccia: #E6ECF2; --t-pannello-traccia-2: #B8C5D3;
+  --t-pannello-pomello: #fff; --t-pin: #15263A; --t-pin-bordo: #fff;
+}
+html[data-stile="scena"][data-notte], html[data-stile="scena"] body.scuro {
+  --t-s1: #081129; --t-s2: #16264F;
+  --t-bg: #0E1630;
+  --t-testo: #EAF0FF; --t-testo-2: #9AA8C8; --t-testo-3: #8592B0; --t-accento: #6FB2FF;
+  --t-card: #18223F; --t-card-solido: #18223F; --t-linea: #26324F; --t-incavo: #121B36;
+  --t-ombra: 0 1px 2px rgba(0,0,0,.25), 0 8px 24px rgba(0,0,0,.25);
+  --t-barra-bg: #18223F; --t-barra-bordo: 1px solid #26324F; --t-barra-ombra: 0 -4px 18px rgba(0,0,0,.25);
+  --t-barra-testo: #9AA8C8; --t-barra-attivo: #6FB2FF;
+  --t-pioggia: #6FB2FF; --t-neve: #DDEBFF; --t-fulmine: #FFE14A; --t-anello: rgba(234,240,255,.4);
+  --t-graf-notte: rgba(0,0,0,.18); --t-graf-bordo: transparent;
+  --t-ic-sole: #F5C542; --t-ic-nube: #C2CCE4; --t-ic-nube-fondo: #18223F; --t-ic-goccia: #6FB2FF;
+  --t-luna-buio: #2A3658; --t-luna-luce: #EAF0FF;
+  --t-mappa-fondo: #0E1630; --t-mini-fondo: #1F2F47;
+  --t-pannello: rgba(24,34,63,.90); --t-pannello-bordo: #26324F; --t-pannello-ombra: 0 4px 18px rgba(0,0,0,.35);
+  --t-pannello-testo: #EAF0FF; --t-pannello-testo-2: #9AA8C8; --t-pannello-accento: #6FB2FF;
+  --t-pannello-attivo-bordo: #6FB2FF; --t-pannello-traccia: #2A3658; --t-pannello-traccia-2: #44527A;
+  --t-pannello-pomello: #EAF0FF; --t-pin: #6FB2FF; --t-pin-bordo: #0E1630;
+}
+
+/* ---------- barra delle schede (identica in index.html e nelle pagine degli stili) ---------- */
+.mt-barra {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 900; box-sizing: border-box;
+  height: calc(var(--t-alto-barra) + env(safe-area-inset-bottom, 0px));
+  padding: 0 6px env(safe-area-inset-bottom, 0px); display: flex;
+  background: var(--t-barra-bg); border-top: var(--t-barra-bordo); box-shadow: var(--t-barra-ombra);
+  -webkit-backdrop-filter: var(--t-barra-blur); backdrop-filter: var(--t-barra-blur);
+  font-family: var(--t-font); -webkit-font-smoothing: antialiased;
+}
+.mt-barra .mt-dentro { display: flex; width: 100%; max-width: 560px; margin: 0 auto; }
+.mt-barra .mt-voce {
+  flex: 1; min-width: 0; min-height: 56px; margin: 0; padding: 0; border: 0; background: none; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+  color: var(--t-barra-testo); font-family: inherit; font-size: var(--t-barra-font); font-weight: var(--t-barra-peso);
+  letter-spacing: var(--t-barra-spazio); line-height: 1.15; text-decoration: none; text-transform: none; text-align: center;
+  -webkit-tap-highlight-color: transparent; -webkit-appearance: none; appearance: none;
+}
+.mt-barra .mt-ic { display: grid; place-items: center; padding: 2px 16px; border-radius: 999px; }
+.mt-barra .mt-voce svg { display: block; width: var(--t-barra-ic); height: var(--t-barra-ic); }
+.mt-barra .mt-voce.mt-su { color: var(--t-barra-attivo); }
+.mt-barra .mt-voce.mt-su .mt-ic { background: var(--t-barra-attivo-bg); }
+.mt-barra .mt-voce:focus-visible { outline: 2px solid var(--t-barra-attivo); outline-offset: -4px; border-radius: 12px; }
+/* le pagine con la barra iniettata da barra.js lasciano spazio sotto */
+html.mt-con-barra body { padding-bottom: calc(var(--t-alto-barra) + env(safe-area-inset-bottom, 0px)) !important; }
